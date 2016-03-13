@@ -10,7 +10,6 @@ USER_PROGS := \
 	ln\
 	ls\
 	mkdir\
-	null\
 	rm\
 	sh\
 	stressfs\

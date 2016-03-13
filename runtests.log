@@ -32,25 +32,24 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x1000 
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
-grep
-init
-ln
-README
-forktest
-stressfs
-wc
-echo
-ls
-zombie
-null
-tester
-mkdir
 usertests
+tester
+forktest
+README
 kill
-rm
 cat
 sh
-balloc: first 469 blocks have been allocated
+mkdir
+grep
+ls
+rm
+stressfs
+wc
+ln
+init
+echo
+zombie
+balloc: first 448 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
 make qemu-nox 
@@ -61,13 +60,15 @@ xv6...
 lapicinit: 1 0xfee00000
 cpu1: starting
 cpu0: starting
-pid 1 : trap 14 err 4 on cpu 1 eip 0x0 addr 0x0--kill proc
-cpu1: panic: init exiting
- 10403c 106083 105c81 0 0 0 0 0 0 0
+init: starting sh
+$ tester
+tester
+null dereference: pid 4 tester: trap 14 err 4 on cpu 1 eip 0x1062 addr 0x0--kill proc
+TEST PASSED
+$ 
 
-test null FAILED (0 of 10)
+test null PASSED (10 of 10)
  (null pointer dereference should kill process)
- Timelimit (20.0s) exceeded
 
 starting null2
 
@@ -87,25 +88,24 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x1000 
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
-grep
-init
-ln
-README
-forktest
-stressfs
-wc
-echo
-ls
-zombie
-null
-tester
-mkdir
 usertests
+tester
+forktest
+README
 kill
-rm
 cat
 sh
-balloc: first 469 blocks have been allocated
+mkdir
+grep
+ls
+rm
+stressfs
+wc
+ln
+init
+echo
+zombie
+balloc: first 448 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
 make qemu-nox 
@@ -116,13 +116,15 @@ xv6...
 lapicinit: 1 0xfee00000
 cpu1: starting
 cpu0: starting
-pid 1 : trap 14 err 4 on cpu 1 eip 0x0 addr 0x0--kill proc
-cpu1: panic: init exiting
- 10403c 106083 105c81 0 0 0 0 0 0 0
+init: starting sh
+$ tester
+tester
+bad dereference (0x0fff): pid 4 tester: trap 14 err 4 on cpu 1 eip 0x1062 addr 0xfff--kill proc
+TEST PASSED
 
-test null2 FAILED (0 of 10)
+
+test null2 PASSED (10 of 10)
  (any dereference from first page should fault)
- Timelimit (20.0s) exceeded
 
 starting bounds
 
@@ -142,25 +144,24 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x1000 
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
-grep
-init
-ln
-README
-forktest
-stressfs
-wc
-echo
-ls
-zombie
-null
-tester
-mkdir
 usertests
+tester
+forktest
+README
 kill
-rm
 cat
 sh
-balloc: first 469 blocks have been allocated
+mkdir
+grep
+ls
+rm
+stressfs
+wc
+ln
+init
+echo
+zombie
+balloc: first 448 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
 make qemu-nox 
@@ -171,13 +172,16 @@ xv6...
 lapicinit: 1 0xfee00000
 cpu1: starting
 cpu0: starting
-pid 1 : trap 14 err 4 on cpu 1 eip 0x0 addr 0x0--kill proc
-cpu1: panic: init exiting
- 10403c 106083 105c81 0 0 0 0 0 0 0
+init: starting sh
+$ tester
+tester
+unexpected trap 14 from cpu 1 eip 1049c1 (cr2=0x0)
+cpu1: panic: trap
+ 
 
 test bounds FAILED (0 of 10)
  (syscall argument checks (null page). ***NOTE*** only write system call is tested here; when grading, we may change the test to any other system call that may take a NULL pointer.)
- Timelimit (20.0s) exceeded
+ xv6 kernel panic
 
 starting shmem_access_invalid_input
 
@@ -680,17 +684,15 @@ Summary:
 test build PASSED
  (build xv6 using make)
 
-test null FAILED (0 of 10)
+test null PASSED (10 of 10)
  (null pointer dereference should kill process)
- Timelimit (20.0s) exceeded
 
-test null2 FAILED (0 of 10)
+test null2 PASSED (10 of 10)
  (any dereference from first page should fault)
- Timelimit (20.0s) exceeded
 
 test bounds FAILED (0 of 10)
  (syscall argument checks (null page). ***NOTE*** only write system call is tested here; when grading, we may change the test to any other system call that may take a NULL pointer.)
- Timelimit (20.0s) exceeded
+ xv6 kernel panic
 
 test shmem_access_invalid_input FAILED (0 of 10)
  (shmem_access invalid input test)
@@ -768,6 +770,6 @@ test shmem_count_exec FAILED (0 of 10)
  (Exec should decrement count for shared pages. Parent accesses a shared page, then it forks. Child performs exec to start a new program. In the new program, the count for the shared page should be 1.)
  make failed (error 2)
 
-Passed 1 of 23 tests.
-Overall 1 of 23
-Points 0 of 220
+Passed 3 of 23 tests.
+Overall 3 of 23
+Points 20 of 220
