@@ -11,7 +11,7 @@ extern char data[];  // defined in data.S
 static pde_t *kpgdir;  // for use in scheduler()
 
 #define SHMEM_PAGES (4)
-int shmem_counts[SHMEM_PAGES];
+int count_shmem[SHMEM_PAGES];
 void *shmem_addr[SHMEM_PAGES];
 
 
@@ -304,7 +304,7 @@ freevm(pde_t *pgdir)
 
   for(i = 0; i < 4; i++) {
     if(proc->shmem_child[i] != NULL) {
-      shmem_counts[i]--;
+      count_shmem[i]--;
     }
   }
 
@@ -337,7 +337,7 @@ copyuvm(pde_t *pgdir, uint sz)
   
   for(i = 0; i < 4; i++) {
     if(proc->shmems[i] != NULL) {
-      shmem_counts[i]++;
+      count_shmem[i]++;
     }
   }
 
@@ -394,7 +394,7 @@ shmeminit(void)
 {
   int i;
   for(i = 0; i < SHMEM_PAGES; i++) {
-    shmem_counts[i] = 0;
+    count_shmem[i] = 0;
     if((shmem_addr[i] = kalloc()) == 0) {
       panic("shmeminit failed");
     }
@@ -429,7 +429,7 @@ shmem_access(int page_number)
     return NULL;
   }
   proc->shmem++;
-  shmem_counts[page_number]++;
+  count_shmem[page_number]++;
   proc->shmems[page_number] = mapping;
 
   return mapping;
@@ -441,6 +441,6 @@ shmem_count(int page_number)
   if(page_number < 0 || page_number >= SHMEM_PAGES) {
     return -1;
   } else {
-    return shmem_counts[page_number];
+    return count_shmem[page_number];
   }
 }
