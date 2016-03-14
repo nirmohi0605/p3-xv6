@@ -366,7 +366,7 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
 }
 
 #define SHMEM_PAGES (4)
-int shmem_count[SHMEM_PAGES];
+int shmem_counts[SHMEM_PAGES]; //how many times has a process mapped these shared pages in
 void *shmem_addr[SHMEM_PAGES];
 
 //initialize the shmem structs
@@ -374,9 +374,12 @@ void
 shmeminit (void){
   int i;
   for (i = 0; i < SHMEM_PAGES; i++){
-    shmem_count[i] = 0;
+    shmem_counts[i] = 0;
     if((shmem_addr[i] = kalloc()) == 0){
       panic("shmeminit failed");
     }
   }
 }
+
+
+
