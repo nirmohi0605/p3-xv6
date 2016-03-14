@@ -1,3 +1,10 @@
+
+####Part B
+- `shmeminit` runs once only in the OS not once for each processor
+- defining 4 shared pages `SHMEM_PAGES`
+- init the count `shmem_count`
+- allocate memory for the pages using kalloc
+
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern x86-based multiprocessor using ANSI C.
