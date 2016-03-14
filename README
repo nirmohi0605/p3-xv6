@@ -10,7 +10,7 @@
 - allocate memory for the pages using kalloc in `shmeminit`
 - add the two system calls. shmem_count and shmem_access - init them on the user and kernel side and in `defs.h`
 - shmem_count  - in vm.c - returns the counter variable initialized in shmeminit
-- in the per-process struct in `proc.h` add the number of child processes `shmem_child` and the number of shared pages in use   `
+- in the per-process struct in `proc.h` add the number of child processes `shmem_child` and the number of shared pages in use 
 `shmem`
 - in shmem_access - 
     - if theres a shared page already mapped - return it
@@ -18,7 +18,7 @@
     - increment counts, map and then return mapping
 - in the freevm function - decrement the number of shmem_child for each of the shared pages post free-ing 
 - in the `fork` function - replicate the shared pages for the new process created by fork
-- adjust according to USERTOP in the functions in `syscall.c`
+- adjust according to `USERTOP` in the functions in `syscall.c`
 
 
 Notes
