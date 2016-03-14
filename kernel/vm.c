@@ -419,20 +419,20 @@ shmem_access(int page_number)
   //mappages:
   //mappages(pde_t *pgdir, void *la, uint size, uint pa, int perm)
   //  if(mappages(pgdir, k->p, k->e - k->p, (uint)k->p, k->perm) < 0)
-  void* tomap = (void *) (USERTOP - ((proc->shmem + 1) * PGSIZE));
+  void* mapping = (void *) (USERTOP - ((proc->shmem + 1) * PGSIZE));
 
-  if(proc->sz >= (int) tomap) {
+  if(proc->sz >= (int) mapping) {
     return NULL;
   }
 
-  if( mappages(proc->pgdir, tomap, PGSIZE, PADDR(shmem_addr[page_number]), PTE_W|PTE_U) < 0 ) {
+  if( mappages(proc->pgdir, mapping, PGSIZE, PADDR(shmem_addr[page_number]), PTE_W|PTE_U) < 0 ) {
     return NULL;
   }
   proc->shmem++;
   shmem_counts[page_number]++;
-  proc->shmems[page_number] = tomap;
+  proc->shmems[page_number] = mapping;
 
-  return tomap;
+  return mapping;
 }
 //  int shmem_count(int page_number)
 int

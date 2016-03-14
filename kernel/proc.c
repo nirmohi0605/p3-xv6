@@ -236,9 +236,9 @@ wait(void)
         kfree(p->kstack);
         p->kstack = 0;
 
-  int j;
-  for(j = 0; j < 4; j++) {
-    proc->shmem_child[j] = p->shmems[j];
+  int k;
+  for(k = 0; k < 4; k++) {
+    proc->shmem_child[k] = p->shmems[k];
   }
   
   freevm(p->pgdir);
