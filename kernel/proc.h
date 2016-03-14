@@ -76,7 +76,7 @@ struct proc {
   char name[16];               // Process name (debugging)
   void *shmems[4];
   int shmem;                    //number of shmem pages
-  void *shmems_child[4];         //shmem pages for child process
+  void *shmem_child[4];         //shmem pages for child process
 };
 
 // Process memory is laid out contiguously, low addresses first:

@@ -164,9 +164,10 @@ fork(void)
   safestrcpy(np->name, proc->name, sizeof(proc->name));
 
   np->shmem = proc->shmem;
-  for(i=0; i < 4; i++){
+  for(i = 0; i < 4; i++) {
     np->shmems[i] = proc->shmems[i];
   }
+
   return pid;
 }
 
@@ -178,7 +179,7 @@ exit(void)
 {
   struct proc *p;
   int fd;
-
+  
   if(proc == initproc)
     panic("init exiting");
 
@@ -235,11 +236,12 @@ wait(void)
         kfree(p->kstack);
         p->kstack = 0;
 
-        int k;
-        for(k=0; k < 4; k++){
-          proc->shmems_child[k] = proc->shmems[k];
-        }
-        freevm(p->pgdir);
+  int j;
+  for(j = 0; j < 4; j++) {
+    proc->shmem_child[j] = p->shmems[j];
+  }
+  
+  freevm(p->pgdir);
         p->state = UNUSED;
         p->pid = 0;
         p->parent = 0;

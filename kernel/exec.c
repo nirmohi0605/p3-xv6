@@ -90,7 +90,7 @@ exec(char *path, char **argv)
 
   proc->shmem = 0;
   for(i = 0; i < 4; i++) {
-    proc->shmems_child[i] = proc->shmems[i];
+    proc->shmem_child[i] = proc->shmems[i];
     proc->shmems[i] = NULL;
   }
 
