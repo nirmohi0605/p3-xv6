@@ -381,5 +381,18 @@ shmeminit (void){
   }
 }
 
+int
+shmem_count(int page_number){
+  if(page_number < 0 || page_number >= SHMEM_PAGES){
+    return -1;
+  } else {
+    return shmem_counts[page_number];
+  }
+}
 
 
+void*
+shmem_access(int page_number){
+
+  return NULL;
+}
