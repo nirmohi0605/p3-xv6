@@ -1,3 +1,27 @@
+####Part A
+- change address from 0 to 4096 for user code in the user `makefile.mk`
+- change `sz = 4096` in exec.c
+- change the for loop initial value to 4096 in `fork()`
+
+####Part B
+- `shmeminit` runs once only in the OS not once for each processor
+- defining 4 shared pages `SHMEM_PAGES`
+- init the count `shmem_count`
+- allocate memory for the pages using kalloc
+
+Notes
+
+- think about clean up 
+    - when a process exits, its AS is freed
+    - go through PT and free all the physical pages associated with the process that has `exit()`
+    - BUT we have a shared page, which shouldn't be deallocated
+    - in the `wait` function we can see that it calls `freevm` for the process' `pgdir`
+- sz marks end of the heap
+- the shared pages go at the end of the AS 
+- heap growing towards the shared pages might run into them 
+- fork creates a copy of the AS. but now the AS has shared pages, we don't want to copy those
+- exec overwrites the AS - can overwrite the shared pages
+
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern x86-based multiprocessor using ANSI C.
