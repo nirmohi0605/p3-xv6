@@ -391,8 +391,31 @@ shmem_count(int page_number){
 }
 
 
-void*
-shmem_access(int page_number){
+void *
+shmem_access(int page_number)
+{
 
-  return NULL;
+  if(page_number < 0 || page_number >= SHMEM_PAGES) {
+    return NULL;
+  }
+
+  if(proc->shmems[page_number] != NULL) {
+    return proc->shmems[page_number];
+  }
+  
+  
+  void* tomap = (void *) (USERTOP - ((proc->shmem + 1) * PGSIZE));
+
+  if(proc->sz >= (int) tomap) {
+    return NULL;
+  }
+
+  if( mappages(proc->pgdir, tomap, PGSIZE, PADDR(shmem_addr[page_number]), PTE_W|PTE_U) < 0 ) {
+    return NULL;
+  }
+  proc->shmem++;
+  shmem_counts[page_number]++;
+  proc->shmems[page_number] = tomap;
+
+  return tomap;
 }
