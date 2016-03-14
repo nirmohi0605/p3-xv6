@@ -364,3 +364,19 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
   }
   return 0;
 }
+
+#define SHMEM_PAGES (4)
+int shmem_count[SHMEM_PAGES];
+void *shmem_addr[SHMEM_PAGES];
+
+//initialize the shmem structs
+void
+shmeminit (void){
+  int i;
+  for (i = 0; i < SHMEM_PAGES; i++){
+    shmem_count[i] = 0;
+    if((shmem_addr[i] = kalloc()) == 0){
+      panic("shmeminit failed");
+    }
+  }
+}
