@@ -9,6 +9,10 @@
 extern char data[];  // defined in data.S
 
 static pde_t *kpgdir;  // for use in scheduler()
+#define SHMEM_PAGES (4)
+int shmem_counts[SHMEM_PAGES]; //how many times has a process mapped these shared pages in
+void *shmem_addr[SHMEM_PAGES];
+
 
 // Allocate one page table for the machine for the kernel address
 // space for scheduler processes.
@@ -231,7 +235,7 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
   char *mem;
   uint a;
 
-  if(newsz > USERTOP)
+  if(newsz > (USERTOP - ((proc->shmem+1)*PGSIZE)))
     return 0;
   if(newsz < oldsz)
     return oldsz;
@@ -286,12 +290,20 @@ freevm(pde_t *pgdir)
 
   if(pgdir == 0)
     panic("freevm: no pgdir");
-  deallocuvm(pgdir, USERTOP, 0);
+  //deallocuvm(pgdir, USERTOP, 0);
+  deallocuvm(pgdir, USERTOP - ((proc->shmem+1)*PGSIZE),0);
+  
   for(i = 0; i < NPDENTRIES; i++){
     if(pgdir[i] & PTE_P)
       kfree((char*)PTE_ADDR(pgdir[i]));
   }
   kfree((char*)pgdir);
+
+   for(i = 0; i < 4; i++) {
+    if(proc->shmems_child[i] != NULL) {
+      shmem_counts[i]--;
+    }
+  }
 }
 
 // Given a parent process's page table, create a copy
@@ -317,6 +329,12 @@ copyuvm(pde_t *pgdir, uint sz)
     memmove(mem, (char*)pa, PGSIZE);
     if(mappages(d, (void*)i, PGSIZE, PADDR(mem), PTE_W|PTE_U) < 0)
       goto bad;
+  }
+
+   for(i = 0; i < 4; i++) {
+    if(proc->shmems[i] != NULL) {
+      shmem_counts[i]++;
+    }
   }
   return d;
 
@@ -365,9 +383,6 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
   return 0;
 }
 
-#define SHMEM_PAGES (4)
-int shmem_counts[SHMEM_PAGES]; //how many times has a process mapped these shared pages in
-void *shmem_addr[SHMEM_PAGES];
 
 //initialize the shmem structs
 void
