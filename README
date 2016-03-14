@@ -18,7 +18,7 @@
     - increment counts, map and then return mapping
 - in the freevm function - decrement the number of shmem_child for each of the shared pages post free-ing 
 - in the `fork` function - replicate the shared pages for the new process created by fork
-- adjust according to `USERTOP` in the functions in `syscall.c`
+- adjust according to `USERTOP` in the functions from`syscall.c`
 
 
 Notes

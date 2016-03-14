@@ -17,7 +17,6 @@
 int
 fetchint(struct proc *p, uint addr, int *ip)
 {
-  //if(addr >= p->sz || addr+4 > p->sz)
   if((addr >= p->sz || addr+4 > p->sz) && (addr < (USERTOP - (p->shmem*PGSIZE)))){
     return -1;
   }

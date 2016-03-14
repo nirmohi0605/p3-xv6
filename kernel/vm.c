@@ -403,7 +403,6 @@ shmeminit(void)
 }
 
 
-//void *shmem_access(int page_number)
 void *
 shmem_access(int page_number)
 {
@@ -416,9 +415,7 @@ shmem_access(int page_number)
     return proc->shmems[page_number];
   }
   
-  //mappages:
-  //mappages(pde_t *pgdir, void *la, uint size, uint pa, int perm)
-  //  if(mappages(pgdir, k->p, k->e - k->p, (uint)k->p, k->perm) < 0)
+  
   void* mapping = (void *) (USERTOP - ((proc->shmem + 1) * PGSIZE));
 
   if(proc->sz >= (int) mapping) {
@@ -434,7 +431,7 @@ shmem_access(int page_number)
 
   return mapping;
 }
-//  int shmem_count(int page_number)
+
 int
 shmem_count(int page_number)
 {
